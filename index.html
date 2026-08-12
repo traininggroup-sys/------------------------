@@ -1,0 +1,1276 @@
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="UTF-8"></meta>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"></meta>
+
+    <title>اختبار إلكتروني</title>
+
+    <style>
+
+        body { font-family: Arial, sans-serif; }
+
+        .hidden { display: none; }
+
+        #result { margin-top: 20px; }
+
+        #timer { font-size: 20px; color: red; font-weight: bold; } /* زيادة سمك الخط */
+
+        h2 { font-size: 22px; font-weight: bold; color: #000000; } /* تغيير اللون إلى الأسود وزيادة السُمك */
+
+        label { font-size: 18px; font-weight: bold; color: #333333; } /* زيادة سمك الخط وتحسين اللون */
+
+        #timer { font-size: 20px; color: red; }
+
+        h2 { font-size: 22px; }
+
+        label { font-size: 18px; }
+
+
+        /* CSS لتحريك الزر */
+
+        #next-button {
+
+            position: absolute; /* يسمح بتحديد الموقع */
+
+            left: 20px; /* المسافة من الجانب الأيسر */
+
+            bottom: 20px; /* المسافة من الأسفل */
+
+            padding: 10px 20px; /* لتعديل حجم الزر */
+
+        }
+
+        #popup {
+
+    position: fixed;
+
+    top: 30%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background-color: #fff;
+
+    border: 1px solid #ccc;
+
+    padding: 20px;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    z-index: 1000;
+
+    text-align: center;
+
+    display: none;
+
+}
+
+#popup button {
+
+    margin-top: 10px;
+
+    padding: 5px 10px;
+
+    background-color: red;
+
+    color: white;
+
+    border: none;
+
+    cursor: pointer;
+
+}
+
+#popup button:hover {
+
+    background-color: darkred;
+
+}
+      
+      
+      
+
+    </style>
+
+</head>
+
+<body>
+
+    <h2 class="header-one">
+
+        التدريب علي اختبارات الجهاز المركزى
+
+
+   
+
+    </div>
+<div id="login-container">
+
+    <label for="password">أدخل كلمة المرور:</label>
+
+    <input id="password" type="password" />
+
+    <br /><br />
+
+    <label for="duration">حدد مدة الاختبار (بالدقائق):</label>
+
+    <input id="duration" min="1" type="number" value="10" />
+<br /><br />
+    <label for="questionCount">حدد عدد الأسئلة:</label>
+    <input id="questionCount" min="1" max="55" type="number" value="20" />
+<br /><br />
+
+    <button onclick="checkPassword()">دخول</button>
+
+</div>
+
+<div class="hidden" id="quiz">
+
+    <div id="timer">20:00</div>
+
+    <div id="question-info">السؤال 1 من 40</div>
+
+    <form id="quizForm">
+
+        <div id="question-container"></div>
+      <br><br><br>
+
+        <button id="next-button" onclick="nextQuestion()" type="button">التالي</button>
+
+    </form>
+
+</div>
+
+<div class="hidden" id="result"></div>
+
+<div id="popup" class="hidden">
+
+    <p>
+        هذا النموذج خاص بجروب المشتركين ويتم فتحه مجانا في وقت الفجر 
+    </p>
+
+    <button onclick="closePopup()">إغلاق</button>
+
+</div>
+
+<script>
+
+     const questions = [
+  {
+    "question": "الكاميرا تعتبر من:",
+    "options": [
+      "وحدات الإخراج",
+      "وحدات المعالجة",
+      "وحدات الإدخال",
+      "وحدات التخزين"
+    ],
+    "answer": "وحدات الإدخال"
+  },
+  {
+    "question": "إلى ماذا يشير الاختصار www؟",
+    "options": [
+      "Wide world web",
+      "Web wide world",
+      "Web world wide",
+      "World wide web"
+    ],
+    "answer": "World wide web"
+  },
+  {
+    "question": "اختصار PPT يشير إلى أي برنامج؟",
+    "options": [
+      "Microsoft Word",
+      "Microsoft Excel",
+      "Microsoft PowerPoint",
+      "Microsoft Access"
+    ],
+    "answer": "Microsoft PowerPoint"
+  },
+  {
+    "question": "أي من التالي يُعتبر أداة إخراج في الحاسوب؟",
+    "options": [
+      "Keyboard (لوحة المفاتيح)",
+      "Printer (طابعة)",
+      "Mouse (فأرة)",
+      "Scanner (ماسح ضوئي)"
+    ],
+    "answer": "Printer (طابعة)"
+  },
+  {
+    "question": "ما هو اختصار لوحة المفاتيح للتحويل بين اللغتين العربية والإنجليزية؟",
+    "options": [
+      "Ctrl + A",
+      "Shift + Enter",
+      "Alt + Shift",
+      "Ctrl + F"
+    ],
+    "answer": "Alt + Shift"
+  },
+  {
+    "question": "أي برنامج يُستخدم لتصميم قواعد البيانات وتخزين البيانات وإدارتها؟",
+    "options": [
+      "Ms Word",
+      "Ms Access",
+      "Ms PowerPoint",
+      "Ms Excel"
+    ],
+    "answer": "Ms Access"
+  },
+  {
+    "question": "للانتقال إلى الصفحة التالية في برنامج Microsoft Word نستخدم مفتاح:",
+    "options": [
+      "Page Down",
+      "Page Up",
+      "Ctrl + End",
+      "Ctrl + Home"
+    ],
+    "answer": "Page Down"
+  },
+  {
+    "question": "ما اسم العملية التي يتم فيها نقل الملفات من جهازك إلى الإنترنت؟",
+    "options": [
+      "Uploading",
+      "Downloading",
+      "FTP",
+      "Installing"
+    ],
+    "answer": "Uploading"
+  },
+  {
+    "question": "لنسخ نص في برنامج Microsoft Word نستخدم الاختصار:",
+    "options": [
+      "CTRL V",
+      "CTRL X",
+      "CTRL C",
+      "CTRL Z"
+    ],
+    "answer": "CTRL C"
+  },
+  {
+    "question": "عند رفع ملف من الإنترنت إلى الكمبيوتر يُسمى ذلك:",
+    "options": [
+      "Upload",
+      "Download",
+      "Copy",
+      "Paste"
+    ],
+    "answer": "Download"
+  },
+  {
+    "question": "أصغر وحدة قياس في الحاسوب هي:",
+    "options": [
+      "كيلوبايت",
+      "ميجابايت",
+      "بت",
+      "بايت"
+    ],
+    "answer": "بت"
+  },
+  {
+    "question": "ما هي وحدة الإدخال والإخراج معًا؟",
+    "options": [
+      "الشاشة",
+      "عصا التحكم",
+      "آلة التصوير الرقمية",
+      "لوحة المفاتيح"
+    ],
+    "answer": "عصا التحكم"
+  },
+  {
+    "question": "أي من التالي يُعد من وحدات الإدخال في الحاسوب؟",
+    "options": [
+      "الشاشة",
+      "السماعات",
+      "الميكروفون",
+      "الطابعة"
+    ],
+    "answer": "الميكروفون"
+  },
+  {
+    "question": "الأعمدة في برنامج Microsoft Excel تكون:",
+    "options": [
+      "أرقام",
+      "حروف",
+      "رموز",
+      "كلمات"
+    ],
+    "answer": "حروف"
+  },
+  {
+    "question": "ما نوع الرسم البياني الذي ستستخدمه لمقارنة أداء موظفين في عام 2016 أو 2024؟",
+    "options": [
+      "مخطط نصفي",
+      "مخطط عمودي",
+      "مخطط خطي",
+      "مخطط دائري"
+    ],
+    "answer": "مخطط عمودي"
+  },
+  {
+    "question": "من مزايا التعليم عن بُعد:",
+    "options": [
+      "تقليل تكاليف الوقت والسفر",
+      "ضرورة الحضور وجهًا لوجه",
+      "صعوبة الوصول إلى المحتوى",
+      "زيادة تكاليف الدراسة"
+    ],
+    "answer": "تقليل تكاليف الوقت والسفر"
+  },
+  {
+    "question": "يتم استخدام HTML لإنشاء____",
+    "options": [
+      "برنامج بلغة الآلة",
+      "خادم ويب",
+      "صفحة ويب",
+      "برنامج بلغة عالية المستوى"
+    ],
+    "answer": "صفحة ويب"
+  },
+  {
+    "question": "أي من التالي يُستخدم لحماية الحاسوب من الفيروسات؟",
+    "options": [
+      "المترجم",
+      "مضاد الفيروسات",
+      "المفسر",
+      "المصحح"
+    ],
+    "answer": "مضاد الفيروسات"
+  },
+  {
+    "question": "كل مما يلي يُعد وحدة إدخال ما عدا:",
+    "options": [
+      "لوحة المفاتيح",
+      "الفأرة",
+      "الماسح الضوئي",
+      "الطابعة"
+    ],
+    "answer": "الطابعة"
+  },
+  {
+    "question": "اختصار IP يشير إلى:",
+    "options": [
+      "بروتوكول الإنترنت",
+      "برنامج الإنترنت",
+      "البروتوكول الداخلي",
+      "بروتوكول الواجهة"
+    ],
+    "answer": "بروتوكول الإنترنت"
+  },
+  {
+    "question": "لحذف ملف بشكل كامل دون نقله إلى سلة المهملات نستخدم الاختصار:",
+    "options": [
+      "CTRL + Z",
+      "CTRL + DELETE",
+      "SHIFT + DELETE",
+      "ALT + DELETE"
+    ],
+    "answer": "SHIFT + DELETE"
+  },
+  {
+    "question": "وحدة قياس دقة الصورة هي:",
+    "options": [
+      "البايت",
+      "البت",
+      "البيكسل أو الميجا بكسل",
+      "الميجابايت"
+    ],
+    "answer": "البيكسل أو الميجا بكسل"
+  },
+  {
+    "question": "أين تجد الساعة والتقويم في جهاز الكمبيوتر؟",
+    "options": [
+      "في شريط المهام",
+      "في شريط القوائم",
+      "على سطح المكتب",
+      "في قائمة ابدأ"
+    ],
+    "answer": "في شريط المهام"
+  },
+  {
+    "question": "ما هو اسم ورقة العمل في برنامج Microsoft Excel؟",
+    "options": [
+      "ورقة",
+      "ورقة عمل",
+      "ملف",
+      "مصنف"
+    ],
+    "answer": "ورقة عمل"
+  },
+  {
+    "question": "ما البرنامج المستخدم في إجراء الحسابات وإنشاء الجداول؟",
+    "options": [
+      "Microsoft Word",
+      "Microsoft Excel",
+      "Microsoft PowerPoint",
+      "Microsoft Access"
+    ],
+    "answer": "Microsoft Excel"
+  },
+  {
+    "question": "أي من التالي يُعد من وحدات الإخراج في الحاسوب؟",
+    "options": [
+      "لوحة المفاتيح",
+      "الفأرة",
+      "السماعات",
+      "الماسح الضوئي"
+    ],
+    "answer": "السماعات"
+  },
+  {
+    "question": "هل الحد الأقصى لعدد الشرائح في PowerPoint هو 60 شريحة؟",
+    "options": [
+      "صح",
+      "خطأ"
+    ],
+    "answer": "خطأ"
+  },
+  {
+    "question": "ما هو نوع الشبكة الذي يغطي مساحة جغرافية كبيرة مثل مدينة أو دولة أو قارات؟",
+    "options": [
+      "LAN",
+      "WAN",
+      "MAN",
+      "WLAN"
+    ],
+    "answer": "WAN"
+  },
+  {
+    "question": "الشبكة التي تربط أجهزة الحاسبات في منطقة جغرافية صغيرة هي شبكة:",
+    "options": [
+      "LAN",
+      "WAN",
+      "TAN",
+      "NIC"
+    ],
+    "answer": "LAN"
+  },
+  {
+    "question": "في شبكة LAN، ما الذي يمكن أن يكون مشتركًا أو متصلًا مع كل الأجهزة؟",
+    "options": [
+      "الطابعة",
+      "الكمبيوتر المحمول",
+      "الهاتف المحمول",
+      "المودم"
+    ],
+    "answer": "الطابعة"
+  },
+  {
+    "question": "ما هو البرنامج الذي يُعرف بأنه برنامج جداول البيانات؟",
+    "options": [
+      "Microsoft Word",
+      "Microsoft Excel",
+      "Microsoft Access",
+      "Microsoft PowerPoint"
+    ],
+    "answer": "Microsoft Excel"
+  },
+  {
+    "question": "ما هي ICDL ؟",
+    "options": [
+      "رخصة قيادة الحاسب الدولية",
+      "برنامج محاسبة",
+      "نظام تشغيل",
+      "شهادة جامعية"
+    ],
+    "answer": "رخصة قيادة الحاسب الدولية"
+  },
+  {
+    "question": "أي من التالي لا يُعد من المكونات الداخلية للحاسوب؟",
+    "options": [
+      "ذاكرة الفلاش",
+      "ذاكرة الوصول العشوائي",
+      "بطاقة الفيديو",
+      "اللوحة الأم"
+    ],
+    "answer": "ذاكرة الفلاش"
+  },
+  {
+    "question": "كل مما يلي من مكونات الحاسب الداخلية ما عدا:",
+    "options": [
+      "وحدة المعالجة المركزية",
+      "ذاكرة الوصول العشوائي",
+      "بطاقة الرسوميات",
+      "الماسح الضوئي"
+    ],
+    "answer": "الماسح الضوئي"
+  },
+  {
+    "question": "ما هي عملية نقل البيانات أو الملفات من الإنترنت إلى جهاز الكمبيوتر؟",
+    "options": [
+      "حفظ الإشارة المرجعية",
+      "دروب",
+      "تنزيل",
+      "لا شيء مما سبق"
+    ],
+    "answer": "تنزيل"
+  },
+  {
+    "question": "أي من المجموعات التالية تحتوي على أجهزة إخراج فقط؟",
+    "options": [
+      "الشاشة، لوحة المفاتيح، الفأرة",
+      "الطابعة، الماسح الضوئي، الشاشة",
+      "الطابعة، السماعة، الميكروفون",
+      "الشاشة، الطابعة، السماعة"
+    ],
+    "answer": "الشاشة، الطابعة، السماعة"
+  },
+  {
+    "question": "يمكن إدراج صف أعلى الخلية في برنامج Microsoft Excel",
+    "options": [
+      "صح",
+      "خطأ"
+    ],
+    "answer": "صح"
+  },
+  {
+    "question": "الاختصار الذي يظهر على سطح المكتب يسمى:",
+    "options": [
+      "صورة",
+      "مستنداتي",
+      "أيقونة",
+      "جهاز الكمبيوتر"
+    ],
+    "answer": "أيقونة"
+  },
+  {
+    "question": "يمكن وصف الشبكة العالمية العنكبية (WWW) بأنها:",
+    "options": [
+      "اسم آخر للإنترنت",
+      "شبكة من أجهزة الكمبيوتر يمكن الوصول إليها عبر منطقة جغرافية واسعة",
+      "نظام من مستندات النص التشعبي المرتبطة ببعضها ويتم الوصول إليها عبر الإنترنت",
+      "مساحة عمل رقمية خاصة بشركة"
+    ],
+    "answer": "نظام من مستندات النص التشعبي المرتبطة ببعضها ويتم الوصول إليها عبر الإنترنت"
+  },
+  {
+    "question": "الذي يقوم بحفظ البيانات جزئياً أو بشكل مؤقت في جهاز الكمبيوتر هو:",
+    "options": [
+      "القرص الصلب",
+      "ذاكرة الوصول العشوائي",
+      "ذاكرة القراءة فقط",
+      "الفلاش ميموري"
+    ],
+    "answer": "ذاكرة الوصول العشوائي"
+  },
+  {
+    "question": "معنى Landscape هو:",
+    "options": [
+      "اتجاه الصفحة الأفقي",
+      "تخطيط الصفحة",
+      "حجم الصفحة",
+      "اتجاه الصفحة العمودي"
+    ],
+    "answer": "اتجاه الصفحة الأفقي"
+  },
+  {
+    "question": "امتداد ملفات برنامج Microsoft Word هو:",
+    "options": [
+      ".xlsx",
+      ".pptx",
+      ".docx",
+      ".pdf"
+    ],
+    "answer": ".docx"
+  },
+  {
+    "question": "للشراء عبر الإنترنت يجب توفر:",
+    "options": [
+      "جهاز متصل بالإنترنت",
+      "جهاز متصل بشبكة داخلية",
+      "جهاز متصل بالبلوتوث",
+      "جهاز غير متصل بالإنترنت"
+    ],
+    "answer": "جهاز متصل بالإنترنت"
+  },
+  {
+    "question": "ما هو الرمز الحلزوني الذي يُطلق عليه قرد العنكبوت؟",
+    "options": [
+      "#",
+      "$",
+      "%",
+      "@"
+    ],
+    "answer": "@"
+  },
+  {
+    "question": "لعمل فاصل بين الفقرات نستخدم:",
+    "options": [
+      "Enter",
+      "Shift + Enter",
+      "Ctrl + Enter",
+      "Alt + Enter"
+    ],
+    "answer": "Enter"
+  },
+  {
+    "question": "لعمل فاصل بين السطور داخل نفس الفقرة نستخدم:",
+    "options": [
+      "Enter",
+      "Shift + Enter",
+      "Ctrl + Enter",
+      "Alt + Enter"
+    ],
+    "answer": "Shift + Enter"
+  },
+  {
+    "question": "وظيفة وحدة المعالجة المركزية (CPU) هي _______.",
+    "options": [
+      "توفير تخزين خارجي للنصوص",
+      "التواصل مع المستخدم",
+      "قراءة وتفسير ومعالجة المعلومات والتعليمات",
+      "إخراج نسخة ورقية"
+    ],
+    "answer": "قراءة وتفسير ومعالجة المعلومات والتعليمات"
+  },
+  {
+    "question": "ما الذي يُطلق عليه عقل الحاسوب؟",
+    "options": [
+      "ذاكرة الوصول العشوائي",
+      "ذاكرة القراءة فقط",
+      "وحدة المعالجة المركزية (CPU)",
+      "اللوحة الأم"
+    ],
+    "answer": "وحدة المعالجة المركزية (CPU)"
+  },
+  {
+    "question": "لماذا يتم فهرسة البيانات للعاملين؟",
+    "options": [
+      "لزيادة حجم الملفات",
+      "لإتلاف البيانات",
+      "لتسهيل الوصول إلى البيانات بسرعة",
+      "لمنع استخدام الحاسوب"
+    ],
+    "answer": "لتسهيل الوصول إلى البيانات بسرعة"
+  },
+  {
+    "question": "أي من الأزرار التالية يُستخدم لفتح نافذة المساعدة في البرنامج؟",
+    "options": [
+      "F5",
+      "F1",
+      "F10",
+      "F4"
+    ],
+    "answer": "F1"
+  },
+  {
+    "question": "اختصار MOS في مجال تكنولوجيا المعلومات يشير إلى:",
+    "options": [
+      "Multi operating system",
+      "Microsoft online service",
+      "Microsoft Office Specialist"
+    ],
+    "answer": "Microsoft Office Specialist"
+  },
+  {
+    "question": "ما هو الاختصار المستخدم لتحديد نطاق خلايا متجاورة في Excel؟",
+    "options": [
+      "Click + Shift",
+      "Ctrl + Click",
+      "Shift + Enter",
+      "Alt + Click"
+    ],
+    "answer": "Click + Shift"
+  },
+  {
+    "question": "ما هو الاختصار المستخدم لتحديد خلايا غير متجاورة في Excel؟",
+    "options": [
+      "Ctrl + Shift",
+      "Shift + Enter",
+      "Click + Ctrl",
+      "Alt + Click"
+    ],
+    "answer": "Click + Ctrl"
+  },
+  {
+    "question": "أي من التالي لا يعتبر امتداد صورة؟",
+    "options": [
+      ".PNG",
+      ".GIF",
+      ".JPG",
+      ".PPT"
+    ],
+    "answer": ".PPT"
+  },
+  {
+    "question": "من امتدادات الصور:",
+    "options": [
+      ".docx",
+      ".xlsx",
+      ".png, .jpg, .jpeg, .gif",
+      ".pptx"
+    ],
+    "answer": ".png, .jpg, .jpeg, .gif"
+  },
+  {
+    "question": "متى يتعرض جهازك لخطر الفيروسات؟",
+    "options": [
+      "عند فتح ملف مرفق من البريد الإلكتروني",
+      "عند نقل ملف من مكان لآخر بدون فتحه"
+    ],
+    "answer": "عند فتح ملف مرفق من البريد الإلكتروني"
+  },
+  {
+    "question": "إرسال البريد الإلكتروني يشبه ماذا؟",
+    "options": [
+      "إرسال طرد",
+      "كتابة خطاب",
+      "مكالمة هاتفية",
+      "رسالة نصية"
+    ],
+    "answer": "كتابة خطاب"
+  },
+  {
+    "question": "يتم تقسيم صفوف برنامج Excel بالحروف",
+    "options": [
+      "صح",
+      "خطأ"
+    ],
+    "answer": "خطأ"
+  },
+  {
+    "question": "ما هو استخدام مفتاح F2؟",
+    "options": [
+      "يفتح قائمة المساعدة",
+      "تسمية الملف",
+      "يقوم بالبحث",
+      "إغلاق البرامج"
+    ],
+    "answer": "تسمية الملف"
+  },
+  {
+    "question": "ما الذي يُطلق على البيانات بعد معالجتها في الحاسب؟",
+    "options": [
+      "بيانات",
+      "معلومات",
+      "ملفات",
+      "برامج"
+    ],
+    "answer": "معلومات"
+  },
+  {
+    "question": "لفتح برنامج Word من نافذة الأوامر (Run) نكتب:",
+    "options": [
+      "Word.exe",
+      "Winword.exe",
+      "Pinword.exe",
+      "Openword.exe"
+    ],
+    "answer": "Winword.exe"
+  },
+  {
+    "question": "أي امتداد يُستخدم لملفات النظام؟",
+    "options": [
+      ".exe",
+      ".sys",
+      ".xls",
+      ".doc"
+    ],
+    "answer": ".sys"
+  },
+  {
+    "question": "أي من الامتدادات التالية يمثل ملفًا جاهزًا للتشغيل (ملف تنفيذي)؟",
+    "options": [
+      "exe",
+      "sys",
+      "txt",
+      "doc"
+    ],
+    "answer": "exe"
+  },
+  {
+    "question": "ما اسم الدالة الشرطية في برنامج Excel التي تستخدم للتحقق من شرط وتنفيذ نتيجة بناءً عليه؟",
+    "options": [
+      "SUM",
+      "IF",
+      "VLOOKUP",
+      "COUNT"
+    ],
+    "answer": "IF"
+  },
+  {
+    "question": "كيف نكتب نطاق الخلايا من A5 إلى E7 في Excel؟",
+    "options": [
+      "A5-E7",
+      "A5;E7",
+      "A5:E7",
+      "A5,E7"
+    ],
+    "answer": "A5:E7"
+  },
+  {
+    "question": "١٠٢٤ ميجا بايت تساوي كام",
+    "options": [
+      "١ كيلو بايت",
+      "١ ميجا بايت",
+      "١ جيجا بايت",
+      "بت"
+    ],
+    "answer": "١ جيجا بايت"
+  },
+  {
+    "question": "المجلد عبارة عن:",
+    "options": [
+      "ملف",
+      "برنامج",
+      "مكان لتجميع الملفات وتنظيمها",
+      "لوحة تحكم"
+    ],
+    "answer": "مكان لتجميع الملفات وتنظيمها"
+  },
+  {
+    "question": "لنقل ملف إلى قرص صلب آخر (هارد آخر) نستخدم:",
+    "options": [
+      "السحب والإفلات",
+      "النسخ واللصق",
+      "الحذف",
+      "الطباعة"
+    ],
+    "answer": "النسخ واللصق"
+  },
+  {
+    "question": "لنقل ملف داخل نفس القرص الصلب (الهارد) نستخدم:",
+    "options": [
+      "السحب والإفلات",
+      "النسخ واللصق",
+      "الحذف",
+      "الطباعة"
+    ],
+    "answer": "السحب والإفلات"
+  },
+  {
+    "question": "لنقل نص من مكان لآخر نستخدم:",
+    "options": [
+      "نسخ فقط",
+      "قص ثم لصق",
+      "نسخ ثم لصق",
+      "حذف ثم إدراج"
+    ],
+    "answer": "قص ثم لصق"
+  },
+  {
+    "question": "صفحة الاكسل الجديدة بتحتوي على كام صفحة؟",
+    "options": [
+      "صفحة واحدة",
+      "3 صفحات",
+      "5 صفحات",
+      "10 صفحات"
+    ],
+    "answer": "صفحة واحدة"
+  },
+  {
+    "question": "ما هو نظام التشغيل القديم الذي يعتمد على لوحة المفاتيح فقط؟",
+    "options": [
+      "macOS",
+      "DOS",
+      "Windows",
+      "Linux"
+    ],
+    "answer": "DOS"
+  },
+  {
+    "question": "الإنترنت كان في الأصل مشروعًا من وكالة أي؟",
+    "options": [
+      "NASA",
+      "ARPA",
+      "NSF"
+    ],
+    "answer": "ARPA"
+  },
+  {
+    "question": "لتحديد صف كامل نضغط على حرف الصف:",
+    "options": [
+      "صح",
+      "خطأ"
+    ],
+    "answer": "خطأ"
+  },
+  {
+    "question": "الـ Unix يعتبر إيه؟",
+    "options": [
+      "لغة برمجة",
+      "نظام تشغيل",
+      "برنامج حماية",
+      "متصفح إنترنت"
+    ],
+    "answer": "نظام تشغيل"
+  },
+  {
+    "question": "ما هو اختصار التراجع عن آخر إجراء؟",
+    "options": [
+      "Ctrl + V",
+      "Ctrl + Z",
+      "Ctrl + C",
+      "Ctrl + Y"
+    ],
+    "answer": "Ctrl + Z"
+  },
+  {
+    "question": "ما هو الامتداد الافتراضي لملفات Microsoft PowerPoint؟",
+    "options": [
+      ".docx",
+      ".xlsx",
+      ".pptx",
+      ".accdb"
+    ],
+    "answer": ".pptx"
+  },
+  {
+    "question": "أي من التالي هو الصيغة الصحيحة لعنوان البريد الإلكتروني؟",
+    "options": [
+      "name@website.info",
+      "name@website@info",
+      "www.nameofebsite.com",
+      "name.website.com"
+    ],
+    "answer": "name@website.info"
+  },
+  {
+    "question": "البيانات الموجودة في ذاكرة ROM تُسمى:",
+    "options": [
+      "بيانات مؤقتة",
+      "بيانات متغيرة",
+      "بيانات ثابتة",
+      "بيانات محذوفة"
+    ],
+    "answer": "بيانات ثابتة"
+  },
+  {
+    "question": "تُسمى الصفحة الأولى في موقع الويب:",
+    "options": [
+      "صفحة الإشارة المرجعية",
+      "صفحة HTML",
+      "الصفحة الرئيسية (Home Page)",
+      "صفحة جافا سكريبت"
+    ],
+    "answer": "الصفحة الرئيسية (Home Page)"
+  },
+  {
+    "question": "Portrait و Landscape هما أمثلة على ____ في برنامج MS-Word؟",
+    "options": [
+      "المستند",
+      "حجم الصفحة",
+      "اتجاه الصفحة",
+      "الهوامش"
+    ],
+    "answer": "اتجاه الصفحة"
+  },
+  {
+    "question": "الإشارات التي يفهمها الحاسب هي:",
+    "options": [
+      "Modem مودم",
+      "Digital Signals الإشارات الرقمية"
+    ],
+    "answer": "Digital Signals الإشارات الرقمية"
+  },
+  {
+    "question": "أيٌّ مما يلي لا يُعد مثالًا على البرامج التطبيقية؟",
+    "options": [
+      "Microsoft Word",
+      "OpenOffice.org Impress",
+      "Microsoft Windows",
+      "MS Excel"
+    ],
+    "answer": "Microsoft Windows"
+  },
+  {
+    "question": "أكبر وحدة من التالي هي:",
+    "options": [
+      "جيجا بايت",
+      "بايت",
+      "كيلو بايت",
+      "ميجا بايت"
+    ],
+    "answer": "جيجا بايت"
+  },
+  {
+    "question": "ما الاسم الذي يُطلق على تقاطع الصف مع العمود في ورقة العمل؟",
+    "options": [
+      "جدول",
+      "خلية cell",
+      "ورقة العمل",
+      "مصنف"
+    ],
+    "answer": "خلية cell"
+  },
+  {
+    "question": "القرص الصلب يخزن بيانات أكثر من القرص المرن:",
+    "options": [
+      "صح",
+      "خطأ"
+    ],
+    "answer": "صح"
+  },
+  {
+    "question": "كل ما يلي يُعد مرجعًا صحيحًا لخلية في Excel ما عدا:",
+    "options": [
+      "A23",
+      "B15",
+      "AA10",
+      "A 23"
+    ],
+    "answer": "A 23"
+  },
+  {
+    "question": "أي من الأجهزة التالية تُعد وحدة إدخال وإخراج معًا؟",
+    "options": [
+      "لوحة المفاتيح",
+      "شاشة اللمس (Touch Screen)",
+      "الميكروفون",
+      "الفأرة"
+    ],
+    "answer": "شاشة اللمس (Touch Screen)"
+  },
+  {
+    "question": "الاختصار ALU يشير إلى؟",
+    "options": [
+      "وحدة المنطق الإضافي",
+      "وحدة المنطق التطبيقي",
+      "وحدة الحساب والمنطق",
+      "وحدة المنطق المصفوفي"
+    ],
+    "answer": "وحدة الحساب والمنطق"
+  },
+  {
+    "question": "كل الاجابات صحيحه لغلق ملف ماعدا واحدة هي____",
+    "options": [
+      "نضغط غلق ملف مرتين",
+      "Alt + F4",
+      "نضغط علي X",
+      "نضغط غلق ملف"
+    ],
+    "answer": "نضغط غلق ملف مرتين"
+  },
+  {
+    "question": "ماذا تفعل إذا توقفت لوحة المفاتيح عن العمل فجأة؟",
+    "options": [
+      "أعمل إعادة تشغيل للجهاز فوراً",
+      "أوصلها بجهاز آخر للتأكد من وجود خلل",
+      "أفصلها وأستخدم الماوس فقط",
+      "أعمل إعادة تشغيل للجهاز فوراً"
+    ],
+    "answer": "أوصلها بجهاز آخر للتأكد من وجود خلل"
+  },
+  {
+    "question": "إذا تعطلت الفأرة أثناء العمل على الكمبيوتر، ماذا تفعل؟",
+    "options": [
+      "لا يمكن متابعة العمل",
+      "إغلاق الجهاز",
+      "استخدام لوحة المفاتيح",
+      "الانتظار حتى تعمل الماوس",
+      "تجربة العمل بها على جهاز آخر لاكتشاف إذا كان بها عطل أم لا"
+    ],
+    "answer": "تجربة العمل بها على جهاز آخر لاكتشاف إذا كان بها عطل أم لا"
+  }
+]
+      
+  
+    let currentQuestion = 0;
+
+    let score = 0;
+
+    let timer;
+
+    let timeLeft;
+
+    let userAnswers = [];
+
+ 
+
+    function closePopup() {
+
+        const popup = document.getElementById("popup");
+
+        popup.style.display = "none";
+
+    }
+
+    function showPopup() {
+
+    const popup = document.getElementById("popup");
+
+    popup.style.display = "block";
+
+}
+
+  function checkPassword() {
+    const passwordInput = document.getElementById("password").value;
+    const durationInput = parseInt(document.getElementById("duration").value) || 10;
+    const questionCountInput = parseInt(document.getElementById("questionCount").value) || questions.length; // استرجاع عدد الأسئلة المحدد
+
+    timeLeft = durationInput * 60;
+
+    if (passwordInput === "10001") {
+        document.getElementById("login-container").classList.add("hidden");
+        document.getElementById("quiz").classList.remove("hidden");
+        document.getElementById("result").classList.add("hidden");
+
+        // خلط الأسئلة وتحديد العدد المطلوب
+        const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5).slice(0, questionCountInput);
+        questions.length = 0;
+        questions.push(...shuffledQuestions);
+
+        loadQuestion();
+        startTimer();
+    } else {
+        showPopup(); // عرض النافذة المنبثقة في حالة كلمة مرور خاطئة
+    }
+}
+    function loadQuestion() {
+
+        const questionContainer = document.getElementById("question-container");
+
+      questionContainer.innerHTML = `
+    <h2>${questions[currentQuestion].question}</h2>
+    ${questions[currentQuestion].options.map((option) => `
+        <label>
+            <input type="radio" name="option" value="${option}">
+          ${option === questions[currentQuestion].answer ? `<span class="correct">${option}</span>` : option}
+        </label><br>
+    `).join('')}
+`;
+
+        document.getElementById("question-info").textContent = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+
+    }
+
+    function nextQuestion() {
+
+        const selectedOption = document.querySelector('input[name="option"]:checked');
+
+        if (selectedOption) {
+
+            const answer = selectedOption.value;
+
+            userAnswers[currentQuestion] = answer;
+
+            if (answer === questions[currentQuestion].answer) {
+
+                score++;
+
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+
+                loadQuestion();
+
+            } else {
+
+                showResult();
+
+            }
+
+        } else {
+
+            alert("يرجى اختيار إجابة.");
+
+        }
+
+    }
+
+    function showResult() {
+
+        clearInterval(timer);
+
+        const resultDiv = document.getElementById("result");
+
+        resultDiv.innerHTML = `<h2>نتيجتك: ${score} من ${questions.length}</h2>`;
+
+        const incorrectAnswers = [];
+
+        const correctAnswers = [];
+
+        const timeoutQuestions = [];
+
+        questions.forEach((q, index) => {
+
+            const userAnswer = userAnswers[index];
+
+            if (userAnswer === undefined) {
+
+                timeoutQuestions.push(q.question);
+
+            } else if (userAnswer === q.answer) {
+
+                correctAnswers.push({ question: q.question, userAnswer: userAnswer });
+
+            } else {
+
+                incorrectAnswers.push({ question: q.question, correctAnswer: q.answer, userAnswer: userAnswer });
+
+            }
+
+        });
+
+        if (correctAnswers.length) {
+
+            resultDiv.innerHTML += `<h3>الإجابات الصحيحة:</h3><ul>${correctAnswers.map(item => `<li style="color: black;">${item.question} - إجابتك: <span style="color: green;">${item.userAnswer}</span></li>`).join('')}</ul>`;
+
+        }
+
+        if (incorrectAnswers.length) {
+
+            resultDiv.innerHTML += `<h3>الإجابات الخاطئة:</h3><ul>${incorrectAnswers.map(item => `<li style="color: black;">${item.question} - إجابتك: <span style="color: red;">${item.userAnswer}</span> - <span style="color: green;">الإجابة الصحيحة: ${item.correctAnswer}</span></li>`).join('')}</ul>`;
+
+        }
+
+        if (timeoutQuestions.length) {
+
+            resultDiv.innerHTML += `<h3>الأسئلة التي لم تجب عليها بسبب انتهاء الوقت:</h3><p>${timeoutQuestions.join(', ')}</p>`;
+
+        }
+
+        resultDiv.classList.remove("hidden");
+
+        document.getElementById("quiz").classList.add("hidden");
+
+    }
+
+    function startTimer() {
+
+        timer = setInterval(() => {
+
+            timeLeft--;
+
+            const minutes = Math.floor(timeLeft / 60);
+
+            const seconds = timeLeft % 60;
+
+            document.getElementById("timer").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+
+                clearInterval(timer);
+
+                showResult();
+
+            }
+
+        }, 1000);
+
+    }
+
+    // إضافة مستمع حدث "Enter" هنا
+
+    document.getElementById("quizForm").addEventListener("keypress", function(event) {
+
+        if (event.key === "Enter") { 
+
+            event.preventDefault(); // لمنع السلوك الافتراضي
+
+            nextQuestion(); // الانتقال للسؤال التالي
+
+        }
+
+    });
+
+</script>
+
+</body>
+
+</html>
